@@ -1,0 +1,10 @@
+users:
+  - username: "martin"
+    password: "martin_password"
+    authentication:
+      server: "smtp.example.com"
+      port: 587
+      user:  "user"
+      password: "123456"
+  - username: "daniel"
+    password: "daniel_password"

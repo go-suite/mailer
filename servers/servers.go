@@ -1,7 +1,6 @@
 package servers
 
 import (
-	"fmt"
 	"github.com/gennesseaux/mailer/config"
 	"github.com/gennesseaux/mailer/controllers"
 	"github.com/gennesseaux/mailer/middleware"
@@ -9,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
+	"time"
 )
 
 type Server struct {
@@ -27,7 +27,10 @@ func (s *Server) Initialize() {
 	// Create a gin router with default middleware:
 	// logger and recovery (crash-free) middleware
 	s.Router = gin.New()
+	s.Router.StaticFile("/favicon.ico", "./assets/mailer.ico")
+	s.Router.Static("/assets", "./assets")
 	s.Router.Use(gin.Logger(), gin.Recovery())
+	s.Router.SetHTMLTemplate(html_index)
 
 	// Add gin middleware to enable CORS support
 	s.Router.Use(cors.Default())
@@ -37,6 +40,9 @@ func (s *Server) Initialize() {
 }
 
 func (s *Server) InitializeRoutes() {
+
+	// Add a homepage
+	s.Router.GET("/", controllers.Home)
 
 	// Add ping handler to test if the s in online
 	s.Router.GET("/check", controllers.Check)
@@ -60,8 +66,20 @@ func (s *Server) InitializeRoutes() {
 }
 
 func (s *Server) Run(addr string) {
-	log.Println(fmt.Sprintf("Listen on port %s \n", addr))
-	log.Fatal(http.ListenAndServe(addr, s.Router))
+	log.Printf("Listen on port %s \n", addr)
+
+	// Server configuration
+	server := &http.Server{
+		Addr:              addr,
+		Handler:           s.Router,
+		ReadTimeout:       1 * time.Second,
+		WriteTimeout:      1 * time.Second,
+		IdleTimeout:       30 * time.Second,
+		ReadHeaderTimeout: 2 * time.Second,
+	}
+
+	// Run it
+	log.Fatal(server.ListenAndServe())
 }
 
 func Run() {

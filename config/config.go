@@ -23,11 +23,11 @@ func init() {
 	C.Secure = false
 
 	// Feed the configuration data from a TOML file
-	if _, err := os.Stat("assets/users.toml"); err == nil {
+	if _, err := os.Stat("data/users.toml"); err == nil {
 		// Create an instance of the configuration struct
 		tomlConfig := &Config{}
 		// Create a feeder that provides the configuration data from a TOML file
-		tomlFeeder := feeder.Toml{Path: "assets/users.toml"}
+		tomlFeeder := feeder.Toml{Path: "data/users.toml"}
 		// Create a Config instance and feed `tomlConfig` using `tomlFeeder`
 		c := config.New()
 		c.AddFeeder(tomlFeeder)
@@ -42,11 +42,11 @@ func init() {
 	}
 
 	// Feed the configuration data from a YAML file
-	if _, err := os.Stat("assets/users.yaml"); err == nil {
+	if _, err := os.Stat("data/users.yaml"); err == nil {
 		// Create an instance of the configuration struct
 		yamlConfig := &Config{}
 		// Create a feeder that provides the configuration data from a YAML file
-		yamlFeeder := feeder.Yaml{Path: "assets/users.yaml"}
+		yamlFeeder := feeder.Yaml{Path: "data/users.yaml"}
 		// Create a Config instance and feed `yamlConfig` using `yamlFeeder`
 		c := config.New()
 		c.AddFeeder(yamlFeeder)

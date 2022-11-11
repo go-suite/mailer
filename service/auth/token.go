@@ -61,6 +61,7 @@ func TokenValid(r *http.Request) error {
 	if err != nil {
 		return err
 	}
+	//nolint:all
 	if _, ok := token.Claims.(jwt.Claims); !ok && !token.Valid {
 		return err
 	}
@@ -95,7 +96,7 @@ func Extract(token *jwt.Token) (*AccessDetails, error) {
 	if ok && token.Valid {
 		accessUuid, ok := claims["access_uuid"].(string)
 		userName, userNameOk := claims["user_name"].(string)
-		if ok == false || userNameOk == false {
+		if !ok || !userNameOk {
 			return nil, errors.New("unauthorized")
 		} else {
 			return &AccessDetails{

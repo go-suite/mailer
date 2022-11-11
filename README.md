@@ -4,7 +4,7 @@ A simple API mail server
 ## Usage
 Mailer can be run in 2 different modes.
 
-It can be open for every one sending a request or it can be limited to a list of users defined in `assets\users.toml` or `assets\users.yaml`
+It can be open for every one sending a request or it can be limited to a list of users defined in `data\users.toml` or `data\users.yaml`
 
 ### Define a list of users allowed to use Mailer
 `TOML`

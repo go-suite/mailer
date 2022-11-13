@@ -1,4 +1,4 @@
-package models
+package model
 
 type smtpAuthentication struct {
 	Server   string `json:"server"`

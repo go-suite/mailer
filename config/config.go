@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/gennesseaux/mailer/models"
+	"github.com/gennesseaux/mailer/model"
 	"github.com/go-mods/convert"
 	"github.com/golobby/config/v3"
 	"github.com/golobby/config/v3/pkg/feeder"
@@ -11,7 +11,7 @@ import (
 var C *Config
 
 type Config struct {
-	Users  []*models.User
+	Users  []*model.User
 	Debug  bool
 	Secure bool
 }
@@ -35,7 +35,7 @@ func init() {
 		err := c.Feed()
 		if err == nil {
 			for _, u := range tomlConfig.Users {
-				C.AddUser(u)
+				C.addUser(u)
 			}
 			C.Secure = true
 		}
@@ -54,14 +54,15 @@ func init() {
 		err := c.Feed()
 		if err == nil {
 			for _, u := range yamlConfig.Users {
-				C.AddUser(u)
+				C.addUser(u)
 			}
 			C.Secure = true
 		}
 	}
 }
 
-func (c *Config) AddUser(user *models.User) {
+// addUser adds a user if it does not exist yet
+func (c *Config) addUser(user *model.User) {
 	for _, u := range c.Users {
 		if u.Username == user.Username {
 			return
@@ -70,7 +71,8 @@ func (c *Config) AddUser(user *models.User) {
 	c.Users = append(c.Users, user)
 }
 
-func (c *Config) GetUser(username string) *models.User {
+// GetUser gets a user from name
+func (c *Config) GetUser(username string) *model.User {
 	for _, u := range c.Users {
 		if u.Username == username {
 			return u

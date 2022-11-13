@@ -1,10 +1,13 @@
-package servers
+package server
 
 import "html/template"
 
 var html_index = template.Must(template.New("html_index").Parse(`
-<html>
+<!doctype html>
+<html lang="en">
 	<head>
+  		<meta charset="utf-8">
+  		<title>{{ .title }}</title>
 	</head>
 	<body>
 		<center>

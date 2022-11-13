@@ -38,7 +38,6 @@ BUILD_FOLDER        := ${BASE_BUILD_FOLDER}
 ## Custom build flags
 LDFLAGS := -w -s
 LDFLAGS += -X '${MODULE}/config.Version=${VERSION}'
-#LDFLAGS += '-extldflags "-static"'
 LDFLAGS += $(EXT_LDFLAGS)
 
 ##

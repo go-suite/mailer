@@ -1,9 +1,9 @@
-package controllers
+package controller
 
 import (
 	"github.com/gennesseaux/mailer/config"
 	status "github.com/gennesseaux/mailer/http/status"
-	"github.com/gennesseaux/mailer/models"
+	"github.com/gennesseaux/mailer/model"
 	"github.com/gin-gonic/gin"
 	"gopkg.in/gomail.v2"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 )
 
 func Send(c *gin.Context) {
-	var r models.Request
+	var r model.Request
 	var err error
 
 	// Retrieve data sent in the body
@@ -51,7 +51,7 @@ func Send(c *gin.Context) {
 	status.Message(c, http.StatusOK, "Ok")
 }
 
-func sendMail(r models.Request) error {
+func sendMail(r model.Request) error {
 	tos := strings.FieldsFunc(r.Message.To, split)
 
 	m := gomail.NewMessage()

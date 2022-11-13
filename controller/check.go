@@ -1,4 +1,4 @@
-package controllers
+package controller
 
 import (
 	status "github.com/gennesseaux/mailer/http/status"

@@ -1,8 +1,8 @@
-package controllers
+package controller
 
 import (
 	"github.com/gennesseaux/mailer/config"
-	"github.com/gennesseaux/mailer/models"
+	"github.com/gennesseaux/mailer/model"
 	"github.com/gennesseaux/mailer/service/auth"
 	"github.com/gin-gonic/gin"
 	"net/http"
@@ -11,7 +11,7 @@ import (
 var tokenManager = auth.TokenManager{}
 
 func Token(c *gin.Context) {
-	var u models.User
+	var u model.User
 
 	// Retrieve user login sent in the body
 	if err := c.ShouldBindJSON(&u); err != nil {

@@ -1,9 +1,9 @@
 package main
 
 import (
-	"github.com/gennesseaux/mailer/servers"
+	"github.com/gennesseaux/mailer/server"
 )
 
 func main() {
-	servers.Run()
+	server.Run()
 }

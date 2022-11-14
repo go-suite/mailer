@@ -55,8 +55,15 @@ func sendMail(r model.Request) error {
 	// decompose list of recipients
 	tos := strings.FieldsFunc(r.Message.To, split)
 
+	// sender
+	sender := r.Message.From
+	if len(sender) == 0 {
+		sender = r.Authentication.User
+	}
+
+	// Create mail
 	m := gomail.NewMessage()
-	m.SetHeader("From", r.Message.From)
+	m.SetHeader("From", sender)
 	m.SetHeader("To", tos...)
 	m.SetHeader("Subject", r.Message.Subject)
 
@@ -72,8 +79,10 @@ func sendMail(r model.Request) error {
 		m.SetBody("text/html", r.Message.HtmlBody)
 	}
 
+	// smtp authentication
 	d := gomail.NewDialer(r.Authentication.Server, r.Authentication.Port, r.Authentication.User, r.Authentication.Password)
 
+	// Send mail
 	return d.DialAndSend(m)
 }
 

@@ -8,7 +8,7 @@ type smtpAuthentication struct {
 }
 
 type message struct {
-	From      string `json:"from"`
+	From      string `json:"from,omitempty"`
 	To        string `json:"to" example:"me@gmail.com,you@gmail.com"`
 	Subject   string `json:"subject"`
 	Body      string `json:"body,omitempty"`

@@ -36,6 +36,9 @@ users:
 ### Check if the server is online
 `GET http://localhost:8081/check`
 
+### Get mailer server info's
+`GET http://localhost:8081/info`
+
 ### Send an email
 `POST http://localhost:8081/send`
 
@@ -56,8 +59,6 @@ users:
 }
 ```
 
-
-
 ### Send an email using an existing user
 
 The authentication can be omitted if defined in the users list
@@ -71,6 +72,49 @@ The authentication can be omitted if defined in the users list
 		"to": "first-email-address,second-email-address",
 		"subject": "email-subject",
 		"body": "html-email-body-content"
+	}
+}
+
+```
+
+## Body options 
+body can also plain text or html text
+
+### plain text
+```json
+{
+    "message": {
+        "from": "your-email-address",
+        "to": "first-email-address,second-email-address",
+        "subject": "email-subject",
+        "plain_body": "Hello!"
+    }
+}
+
+```
+
+### html text
+```json
+{
+    "message": {
+        "from": "your-email-address",
+        "to": "first-email-address,second-email-address",
+        "subject": "email-subject",
+        "html_body": "<p>Hello!</p>"
+    }
+}
+
+```
+
+### plain and html text
+```json
+{
+	"message": {
+		"from": "your-email-address",
+		"to": "first-email-address,second-email-address",
+		"subject": "email-subject",
+        "plain_body": "Hello!",
+        "html_body": "<p>Hello!</p>"
 	}
 }
 

@@ -52,13 +52,25 @@ func Send(c *gin.Context) {
 }
 
 func sendMail(r model.Request) error {
+	// decompose list of recipients
 	tos := strings.FieldsFunc(r.Message.To, split)
 
 	m := gomail.NewMessage()
 	m.SetHeader("From", r.Message.From)
 	m.SetHeader("To", tos...)
 	m.SetHeader("Subject", r.Message.Subject)
-	m.SetBody("text/html", r.Message.Body)
+
+	// body
+	if len(r.Message.Body) > 0 {
+		m.SetBody("text/html", r.Message.Body)
+	} else if len(r.Message.PlainBody) > 0 {
+		m.SetBody("text/plain", r.Message.PlainBody)
+		if len(r.Message.HtmlBody) > 0 {
+			m.AddAlternative("text/html", r.Message.HtmlBody)
+		}
+	} else if len(r.Message.HtmlBody) > 0 {
+		m.SetBody("text/html", r.Message.HtmlBody)
+	}
 
 	d := gomail.NewDialer(r.Authentication.Server, r.Authentication.Port, r.Authentication.User, r.Authentication.Password)
 

@@ -47,6 +47,9 @@ func (s *Server) initializeRoutes() {
 	// Add ping handler to test if the s in online
 	s.Router.GET("/check", controller.Check)
 
+	// Add info handler to info's about mailer
+	s.Router.GET("/info", controller.Info)
+
 	// If a list of users is defined, the user need to authenticate
 	if len(config.C.Users) > 0 {
 		// Add token handler

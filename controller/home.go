@@ -2,8 +2,8 @@ package controller
 
 import (
 	"fmt"
-	"github.com/gennesseaux/mailer/config"
 	"github.com/gin-gonic/gin"
+	"github.com/go-suite/mailer/config"
 	"net/http"
 )
 

@@ -1,8 +1,8 @@
 package controller
 
 import (
-	status "github.com/gennesseaux/mailer/http/status"
 	"github.com/gin-gonic/gin"
+	status "github.com/go-suite/mailer/http/status"
 	"net/http"
 )
 

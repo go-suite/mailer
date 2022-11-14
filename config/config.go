@@ -1,8 +1,8 @@
 package config
 
 import (
-	"github.com/gennesseaux/mailer/model"
 	"github.com/go-mods/convert"
+	"github.com/go-suite/mailer/model"
 	"github.com/golobby/config/v3"
 	"github.com/golobby/config/v3/pkg/feeder"
 	"os"

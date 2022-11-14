@@ -1,11 +1,11 @@
 package server
 
 import (
-	"github.com/gennesseaux/mailer/config"
-	"github.com/gennesseaux/mailer/controller"
-	"github.com/gennesseaux/mailer/middleware"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/go-suite/mailer/config"
+	"github.com/go-suite/mailer/controller"
+	"github.com/go-suite/mailer/middleware"
 	"log"
 	"net/http"
 	"time"

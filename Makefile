@@ -1,5 +1,5 @@
 ## Project details
-MODULE  := github.com/gennesseaux/mailer
+MODULE  := github.com/go-suite/mailer
 
 ## go
 GO           	  ?= go

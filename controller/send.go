@@ -1,10 +1,10 @@
 package controller
 
 import (
-	"github.com/gennesseaux/mailer/config"
-	status "github.com/gennesseaux/mailer/http/status"
-	"github.com/gennesseaux/mailer/model"
 	"github.com/gin-gonic/gin"
+	"github.com/go-suite/mailer/config"
+	status "github.com/go-suite/mailer/http/status"
+	"github.com/go-suite/mailer/model"
 	"gopkg.in/gomail.v2"
 	"net/http"
 	"strings"

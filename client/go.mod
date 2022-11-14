@@ -1,3 +1,3 @@
-module github.com/gennesseaux/mailer/client
+module github.com/go-suite/mailer/client
 
 go 1.19

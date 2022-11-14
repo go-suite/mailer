@@ -1,7 +1,7 @@
 package main
 
 import (
-	"github.com/gennesseaux/mailer/server"
+	"github.com/go-suite/mailer/server"
 )
 
 func main() {

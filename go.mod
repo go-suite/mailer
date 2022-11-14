@@ -1,4 +1,4 @@
-module github.com/gennesseaux/mailer
+module github.com/go-suite/mailer
 
 go 1.19
 

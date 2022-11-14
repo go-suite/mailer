@@ -1,8 +1,8 @@
 package middleware
 
 import (
-	"github.com/gennesseaux/mailer/service/auth"
 	"github.com/gin-gonic/gin"
+	"github.com/go-suite/mailer/service/auth"
 	"net/http"
 )
 

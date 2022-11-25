@@ -3,10 +3,11 @@ package server
 import (
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	log "github.com/go-mods/qlog"
+	"github.com/go-mods/qlog/console/colored"
 	"github.com/go-suite/mailer/config"
 	"github.com/go-suite/mailer/controller"
 	"github.com/go-suite/mailer/middleware"
-	"log"
 	"net/http"
 	"time"
 )
@@ -16,6 +17,10 @@ type Server struct {
 }
 
 var MailerServer Server
+
+func init() {
+	log.Logger = colored.DateTimeMessage
+}
 
 func (s *Server) initialize() {
 
@@ -69,8 +74,6 @@ func (s *Server) initializeRoutes() {
 }
 
 func (s *Server) run(addr string) {
-	log.Printf("Listen on port %s \n", addr)
-
 	// Server configuration
 	server := &http.Server{
 		Addr:              addr,
@@ -81,17 +84,18 @@ func (s *Server) run(addr string) {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	// run it
-	log.Fatal(server.ListenAndServe())
+	log.Info().
+		Str("port", addr).
+		Msgf("Starting Mailer Server on port '%s'", addr)
+
+	log.Fatal().
+		Err(server.ListenAndServe()).
+		Msg("Mailer Server Closed")
 }
 
 func Run() {
-	log.Println("Running Mailer server ...")
-
 	// Create an instance of the Mailer server and run it
 	MailerServer = Server{}
 	MailerServer.initialize()
 	MailerServer.run(":8080")
-
-	log.Println("Mailer server exiting")
 }

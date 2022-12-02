@@ -6,11 +6,14 @@ require (
 	github.com/gin-contrib/cors v1.4.0
 	github.com/gin-gonic/gin v1.8.1
 	github.com/go-mods/convert v0.0.0-20221006142555-24e3dca7390f
-	github.com/go-mods/qlog v0.0.0-20221125084025-3537bc5c155d
+	github.com/go-mods/zerolog-gin v0.0.0-20221202144147-836c24e4c17e
+	github.com/go-mods/zerolog-quick v0.0.0-20221126140903-c21a099f06e2
 	github.com/golang-jwt/jwt/v4 v4.4.2
 	github.com/golobby/config/v3 v3.4.1
+	github.com/rs/zerolog v1.28.0
 	github.com/twinj/uuid v1.0.0
 	gopkg.in/gomail.v2 v2.0.0-20160411212932-81ebce5c23df
+	gopkg.in/natefinch/lumberjack.v2 v2.0.0
 )
 
 require (
@@ -32,11 +35,10 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/myesui/uuid v1.0.0 // indirect
-	github.com/pelletier/go-toml/v2 v2.0.5 // indirect
-	github.com/rs/zerolog v1.28.0 // indirect
+	github.com/pelletier/go-toml/v2 v2.0.6 // indirect
 	github.com/ugorji/go/codec v1.2.7 // indirect
 	github.com/xo/terminfo v0.0.0-20210125001918-ca9a967f8778 // indirect
-	golang.org/x/crypto v0.2.0 // indirect
+	golang.org/x/crypto v0.3.0 // indirect
 	golang.org/x/net v0.2.0 // indirect
 	golang.org/x/sys v0.2.0 // indirect
 	golang.org/x/text v0.4.0 // indirect

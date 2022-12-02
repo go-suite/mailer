@@ -1,14 +1,18 @@
 package server
 
 import (
+	"fmt"
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
-	log "github.com/go-mods/qlog"
-	"github.com/go-mods/qlog/console/colored"
+	ginLog "github.com/go-mods/zerolog-gin"
+	"github.com/go-mods/zerolog-quick/console/colored"
 	"github.com/go-suite/mailer/config"
 	"github.com/go-suite/mailer/controller"
 	"github.com/go-suite/mailer/middleware"
+	"github.com/rs/zerolog"
+	"gopkg.in/natefinch/lumberjack.v2"
 	"net/http"
+	"os"
 	"time"
 )
 
@@ -17,9 +21,46 @@ type Server struct {
 }
 
 var MailerServer Server
+var MainLogger zerolog.Logger
+var FileLogger zerolog.Logger
 
 func init() {
-	log.Logger = colored.DateTimeMessage
+	c := config.C.LogFile
+
+	// console writer
+	consoleWriter := zerolog.ConsoleWriter{
+		Out:        os.Stdout,
+		NoColor:    true,
+		TimeFormat: "2006-01-02 15:04:05",
+		PartsOrder: []string{
+			zerolog.TimestampFieldName,
+			zerolog.MessageFieldName,
+		},
+		FormatExtra: colored.Colorize,
+	}
+
+	// console logger
+	MainLogger = zerolog.New(consoleWriter).
+		Level(zerolog.InfoLevel).
+		With().
+		Timestamp().
+		Logger()
+
+	// file writer
+	fileWriter := &lumberjack.Logger{
+		Filename:   c.Filename,
+		MaxSize:    c.MaxSize,
+		MaxBackups: c.MaxBackups,
+		MaxAge:     c.MaxAge,
+		Compress:   c.Compress,
+	}
+
+	// file logger
+	FileLogger = zerolog.New(fileWriter).
+		Level(zerolog.TraceLevel).
+		With().
+		Timestamp().
+		Logger()
 }
 
 func (s *Server) initialize() {
@@ -34,7 +75,24 @@ func (s *Server) initialize() {
 	s.Router = gin.New()
 	s.Router.StaticFile("/favicon.ico", "./assets/mailer.ico")
 	s.Router.Static("/assets", "./assets")
-	s.Router.Use(gin.Logger(), gin.Recovery())
+	s.Router.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
+		var statusColor, methodColor, resetColor string
+		if param.IsOutputColor() {
+			statusColor = param.StatusCodeColor()
+			methodColor = param.MethodColor()
+			resetColor = param.ResetColor()
+		}
+		return fmt.Sprintf("[MAILER] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n%s",
+			param.TimeStamp.Format("2006/01/02 - 15:04:05"),
+			statusColor, param.StatusCode, resetColor,
+			param.Latency,
+			param.ClientIP,
+			methodColor, param.Method, resetColor,
+			param.Path,
+			param.ErrorMessage,
+		)
+	}))
+	s.Router.Use(gin.Recovery())
 	s.Router.SetHTMLTemplate(html_index)
 
 	// Add gin middleware to enable CORS support
@@ -46,22 +104,32 @@ func (s *Server) initialize() {
 
 func (s *Server) initializeRoutes() {
 
+	// Not logged routes
+	routes := s.Router.Group("/")
+
+	// Logged routes
+	loggedRoutes := s.Router.Group("/")
+	loggedRoutes.Use(ginLog.LoggerWithOptions(&ginLog.Options{
+		Logger:        &FileLogger,
+		FieldsExclude: []string{ginLog.BodyFieldName},
+	}))
+
 	// Add a homepage
-	s.Router.GET("/", controller.Home)
+	loggedRoutes.GET("/", controller.Home)
 
 	// Add ping handler to test if the s in online
-	s.Router.GET("/check", controller.Check)
+	loggedRoutes.GET("/check", controller.Check)
 
 	// Add info handler to info's about mailer
-	s.Router.GET("/info", controller.Info)
+	loggedRoutes.GET("/info", controller.Info)
 
 	// If a list of users is defined, the user need to authenticate
 	if len(config.C.Users) > 0 {
 		// Add token handler
-		s.Router.POST("/token", controller.Token)
+		routes.POST("/token", controller.Token)
 
 		// Following routes require to be authenticated
-		authorized := s.Router.Group("/")
+		authorized := loggedRoutes.Group("")
 		authorized.Use(middleware.TokenAuthMiddleware())
 		{
 			// Add send handler
@@ -69,7 +137,7 @@ func (s *Server) initializeRoutes() {
 		}
 	} else {
 		// Add send handler
-		s.Router.POST("/send", controller.Send)
+		loggedRoutes.POST("/send", controller.Send)
 	}
 }
 
@@ -84,11 +152,11 @@ func (s *Server) run(addr string) {
 		ReadHeaderTimeout: 2 * time.Second,
 	}
 
-	log.Info().
+	MainLogger.Info().
 		Str("port", addr).
-		Msgf("Starting Mailer Server on port '%s'", addr)
+		Msg("Starting Mailer Server")
 
-	log.Fatal().
+	MainLogger.Fatal().
 		Err(server.ListenAndServe()).
 		Msg("Mailer Server Closed")
 }

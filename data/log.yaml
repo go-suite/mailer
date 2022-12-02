@@ -1,0 +1,7 @@
+logfile:
+  filename: "mailer.log"
+  maxsize: 5
+  maxage: 14
+  maxbackups: 100
+  localtime: true
+  compress: false
